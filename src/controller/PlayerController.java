@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.desktop.SystemEventListener;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -27,20 +28,46 @@ public class PlayerController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         RequestDispatcher dispatcher;
+        int id;
+        String nome;
+        String url;
+        String nationality;
+        Player p;
 
         switch (request.getServletPath()) {
             case "/player/create":
-                int id = Integer.parseInt(request.getParameter("id"));
-                String nome = request.getParameter("nome");
-                String url = request.getParameter("url");
-                String nationality = request.getParameter("nationality");
+                id = Integer.parseInt(request.getParameter("id"));
+                nome = request.getParameter("name");
+                url = request.getParameter("url");
+                nationality = request.getParameter("nationality");
 
-                Player p = new Player(id, nome, url, nationality);
+                p = new Player(id, nome, url, nationality);
 
                 try (DAOFactory daoFactory = new DAOFactory();) {
                     PlayerDAO dao = daoFactory.getPlayerDAO();
 
                     dao.create(p);
+
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
+
+                response.sendRedirect(request.getContextPath() + "/player");
+
+                break;
+
+            case "/player/update":
+                id = Integer.parseInt(request.getParameter("id"));
+                nome = request.getParameter("name");
+                url = request.getParameter("url");
+                nationality = request.getParameter("nationality");
+
+                p = new Player(id, nome, url, nationality);
+
+                try (DAOFactory daoFactory = new DAOFactory();) {
+                    PlayerDAO dao = daoFactory.getPlayerDAO();
+
+                    dao.update(p);
 
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
                     request.getSession().setAttribute("error", ex.getMessage());
@@ -62,6 +89,35 @@ public class PlayerController extends HttpServlet {
                 dispatcher = request.getRequestDispatcher("/playerCadastro.jsp");
                 dispatcher.forward(request, response);
                 break;
+            case "/player/update":
+                try (DAOFactory daoFactory = new DAOFactory()) {
+                    dao = daoFactory.getPlayerDAO();
+
+                    Player player = dao.read(Integer.parseInt(request.getParameter("id")));
+
+                    request.setAttribute("player", player);
+
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
+
+                dispatcher = request.getRequestDispatcher("/playerUpdate.jsp");
+                dispatcher.forward(request, response);
+                break;
+
+            case "/player/delete":
+                try (DAOFactory daoFactory = new DAOFactory()) {
+                    dao = daoFactory.getPlayerDAO();
+
+                    dao.delete(Integer.parseInt(request.getParameter("id")));
+
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
+                response.sendRedirect(request.getContextPath() + "/player");
+                break;
+
+
             case "/player":
                 try (DAOFactory daoFactory = new DAOFactory()) {
                     dao = daoFactory.getPlayerDAO();

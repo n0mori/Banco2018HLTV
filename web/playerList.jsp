@@ -10,32 +10,43 @@
 <html>
 <head>
     <title>Players - BD 2018</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
+<div class="container">
     <h1>Lista de Players</h1>
+
+    <a href="/player/create">Create</a>
     <%
         List<Player> list = (List<Player>) request.getAttribute("playerList");
 
-        out.println("<table>");
+        out.println("<table class=\"table\">");
+        out.println("<thead class=\"thead-dark\">");
         out.println("<tr>");
-        out.println("<td>Id</td>");
-        out.println("<td>Nome</td>");
-        out.println("<td>URL</td>");
-        out.println("<td>Nacionalidade</td>");
+        out.println("<td scope=\"col\">Id</td>");
+        out.println("<td scope=\"col\">Nome</td>");
+        out.println("<td scope=\"col\">URL</td>");
+        out.println("<td scope=\"col\">Nacionalidade</td>");
+        out.println("<td scope=\"col\"></td>");
+        out.println("<td scope=\"col\"></td>");
         out.println("</tr>");
+        out.println("</thead>");
 
         if (list != null) {
             for (Player p : list) {
                 out.println("<tr>");
                 out.println("<td>" + p.getId() + "</td>");
-                out.println("<td>" + p.getNome() + "</td>");
+                out.println("<td>" + p.getName() + "</td>");
                 out.println("<td><a href=\"" + p.getUrl() + "\">" + p.getUrl() + "</a></td>");
                 out.println("<td>" + p.getNationality() + "</td>");
+                out.println("<td><a href=\"/player/update?id=" + p.getId() + "\">Edit</a></td>");
+                out.println("<td><a href=\"/player/delete?id=" + p.getId() + "\">Remove</a></td>");
                 out.println("</tr>");
             }
 
             out.println("</table>");
         }
     %>
+</div>
 </body>
 </html>

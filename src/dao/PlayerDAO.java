@@ -13,27 +13,27 @@ public class PlayerDAO extends DAO<Player> {
 
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.player"
-            + "(id, nome, url, nationality)"
+            + "(id, name, url, nationality)"
             + "VALUES (?,?,?,?) RETURNING id";
 
     private static final String READ_QUERY
-            = "SELECT login, nome, nascimento, avatar "
-            + "FROM j2ee.usuario "
+            = "SELECT id, name, url, nationality "
+            + "FROM hltv.player "
             + "WHERE id = ?;";
 
     private static final String UPDATE_QUERY
-            = "UPDATE j2ee.usuario "
-            + "SET login = ?, nome = ?, nascimento = ? "
+            = "UPDATE hltv.player "
+            + "SET name = ?, url = ?, nationality = ? "
             + "WHERE id = ?;";
 
     private static final String DELETE_QUERY
-            = "DELETE FROM j2ee.usuario "
+            = "DELETE FROM hltv.player "
             + "WHERE id = ?;";
 
     private static final String ALL_QUERY
-            = "SELECT id, nome, url, nationality "
+            = "SELECT id, name, url, nationality "
             + "FROM hltv.player "
-            + "ORDER BY nome;";
+            + "ORDER BY name;";
 
     public PlayerDAO(Connection connection) {
         super(connection);
@@ -43,7 +43,7 @@ public class PlayerDAO extends DAO<Player> {
     public void create(Player player) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_QUERY);) {
             statement.setInt(1, player.getId());
-            statement.setString(2, player.getNome());
+            statement.setString(2, player.getName());
             statement.setString(3, player.getUrl());
             statement.setString(4, player.getNationality());
 
@@ -58,16 +58,57 @@ public class PlayerDAO extends DAO<Player> {
 
     @Override
     public Player read(Integer id) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(READ_QUERY);) {
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery();) {
+                if (resultSet.next()) {
+                    return new Player(
+                            resultSet.getInt("id"),
+                            resultSet.getString("nome"),
+                            resultSet.getString("url"),
+                            resultSet.getString("nationality")
+                    );
+                }
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+
+            throw new SQLException("Erro ao encontrar player");
+        }
         return null;
     }
 
     @Override
     public void update(Player player) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_QUERY);) {
+            statement.setString(1, player.getName());
+            statement.setString(2, player.getUrl());
+            statement.setString(3, player.getNationality());
+            statement.setInt(4, player.getId());
 
+            statement.executeQuery();
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+
+            throw new SQLException("Erro ao fazer update player");
+        }
     }
 
     @Override
     public void delete(Integer id) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);) {
+            statement.setInt(1, id);
+
+            statement.executeQuery();
+
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+
+            throw new SQLException("Erro ao deletar player");
+        }
 
     }
 

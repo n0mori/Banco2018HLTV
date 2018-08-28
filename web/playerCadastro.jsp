@@ -8,16 +8,30 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Produto</title>
-
+    <title>Player - Cadastro</title>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
+<div class="container">
+<h1>Player - Create</h1>
 <form action="/player/create" method="post">
-    <p>Id HLTV</p><input type="number" name="id" step="1">
-    <p>Nome</p><input type="text" name="nome">
-    <p>URL HLTV</p><input type="text" name="url">
-    <p>Nacionalidade</p><input type="text" name="nationality">
-    <input type="submit">
+    <div class="form-group">
+        <label for="id">Id HLTV</label>
+        <input type="number" class="form-text" id="id" name="id" step="1">
+    </div>
+    <div class="form-group">
+        <label for="name">Nome</label><input type="text" class="form-text" id="name" name="name">
+    </div>
+    <div class="form-group">
+        <label for="url">URL HLTV</label><input type="text" class="form-text" id="url" name="url">
+    </div>
+    <div class="form-group">
+        <label for="nationality">Nacionalidade</label><input type="text" class="form-text" id="nationality" name="nationality">
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary">
+    </div>
 </form>
+</div>
 </body>
 </html>
