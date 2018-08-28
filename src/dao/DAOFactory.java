@@ -71,6 +71,10 @@ public class DAOFactory implements AutoCloseable {
 
     public PlayerDAO getPlayerDAO() { return new PlayerDAO(connection);}
 
+    public TeamDAO getTeamDAO() { return new TeamDAO(connection);}
+
+    public MatchDAO getMatchDAO() { return new MatchDAO(connection);}
+
     @Override
     public void close() throws SQLException {
         closeConnection();

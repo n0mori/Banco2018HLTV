@@ -14,7 +14,7 @@ public class PlayerDAO extends DAO<Player> {
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.player"
             + "(id, name, url, nationality)"
-            + "VALUES (?,?,?,?) RETURNING id";
+            + "VALUES (?,?,?,?) RETURNING id;";
 
     private static final String READ_QUERY
             = "SELECT id, name, url, nationality "
