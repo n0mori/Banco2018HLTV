@@ -86,7 +86,7 @@ public class PlayerController extends HttpServlet {
 
         switch (request.getServletPath()) {
             case "/player/create":
-                dispatcher = request.getRequestDispatcher("/playerCadastro.jsp");
+                dispatcher = request.getRequestDispatcher("/player/Cadastro.jsp");
                 dispatcher.forward(request, response);
                 break;
             case "/player/update":
@@ -101,7 +101,7 @@ public class PlayerController extends HttpServlet {
                     request.getSession().setAttribute("error", ex.getMessage());
                 }
 
-                dispatcher = request.getRequestDispatcher("/playerUpdate.jsp");
+                dispatcher = request.getRequestDispatcher("/player/Update.jsp");
                 dispatcher.forward(request, response);
                 break;
 
@@ -128,7 +128,7 @@ public class PlayerController extends HttpServlet {
                         request.setAttribute("playerList", list);
                     }
 
-                    dispatcher = request.getRequestDispatcher("/playerList.jsp");
+                    dispatcher = request.getRequestDispatcher("/player/List.jsp");
                     dispatcher.forward(request, response);
 
                 } catch (ClassNotFoundException | IOException | SQLException ex) {
