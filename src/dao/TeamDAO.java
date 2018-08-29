@@ -16,11 +16,11 @@ public class TeamDAO extends DAO<Team> {
 
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.team "
-            + "(id, name, url, nationality)"
+            + "(id, \"name\", url, nationality)"
             + "VALUES (?,?,?,?) RETURNING id;";
 
     private static final String READ_QUERY
-            = "SELECT id, name, url, nationality "
+            = "SELECT id, \"name\", url, nationality "
             + "FROM hltv.team "
             + "WHERE id = ?;";
 
@@ -34,9 +34,9 @@ public class TeamDAO extends DAO<Team> {
             + "WHERE id = ?;";
 
     private static final String ALL_QUERY
-            = "SELECT id, name, url, nationality "
+            = "SELECT id, \"name\", url, nationality "
             + "FROM hltv.team "
-            + "ORDER BY name;";
+            + "ORDER BY \"name\";";
 
     public TeamDAO(Connection connection) {
         super(connection);

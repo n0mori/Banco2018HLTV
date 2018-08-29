@@ -13,17 +13,17 @@ public class PlayerDAO extends DAO<Player> {
 
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.player"
-            + "(id, name, url, nationality)"
+            + "(id, \"name\", url, nationality)"
             + "VALUES (?,?,?,?) RETURNING id;";
 
     private static final String READ_QUERY
-            = "SELECT id, name, url, nationality "
+            = "SELECT id, \"name\", url, nationality "
             + "FROM hltv.player "
             + "WHERE id = ?;";
 
     private static final String UPDATE_QUERY
             = "UPDATE hltv.player "
-            + "SET name = ?, url = ?, nationality = ? "
+            + "SET \"name\" = ?, url = ?, nationality = ? "
             + "WHERE id = ?;";
 
     private static final String DELETE_QUERY
@@ -31,9 +31,9 @@ public class PlayerDAO extends DAO<Player> {
             + "WHERE id = ?;";
 
     private static final String ALL_QUERY
-            = "SELECT id, name, url, nationality "
+            = "SELECT id, \"name\", url, nationality "
             + "FROM hltv.player "
-            + "ORDER BY name;";
+            + "ORDER BY \"name\";";
 
     public PlayerDAO(Connection connection) {
         super(connection);
@@ -65,7 +65,7 @@ public class PlayerDAO extends DAO<Player> {
                 if (resultSet.next()) {
                     return new Player(
                             resultSet.getInt("id"),
-                            resultSet.getString("nome"),
+                            resultSet.getString("name"),
                             resultSet.getString("url"),
                             resultSet.getString("nationality")
                     );
@@ -121,7 +121,7 @@ public class PlayerDAO extends DAO<Player> {
             while (result.next()) {
                 Player player = new Player(
                         result.getInt("id"),
-                        result.getString("nome"),
+                        result.getString("name"),
                         result.getString("url"),
                         result.getString("nationality")
                 );
