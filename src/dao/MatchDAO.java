@@ -16,17 +16,17 @@ public class MatchDAO extends DAO<Match> {
 
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.match"
-            + "(id, url, home_id, home_score, away_id, away_score, event_url, bestof, date)"
+            + "(id, url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\")"
             + "VALUES (?,?,?,?,?,?,?,?,?) RETURNING id;";
 
     private static final String READ_QUERY
-            = "SELECT id, url, home_id, home_score, away_id, away_score, event_url, bestof, date "
+            = "SELECT id, url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\" "
             + "FROM hltv.match "
             + "WHERE id = ?;";
 
     private static final String UPDATE_QUERY
             = "UPDATE hltv.match "
-            + "SET url = ?, home_id = ?, home_score = ?, away_id = ?, away_score = ?, event_url = ?, bestof = ?, date = ? "
+            + "SET url = ?, home_id = ?, home_score = ?, away_id = ?, away_score = ?, event_url = ?, bestof = ?, \"date\" = ? "
             + "WHERE id = ?;";
 
     private static final String DELETE_QUERY
@@ -34,9 +34,9 @@ public class MatchDAO extends DAO<Match> {
             + "WHERE id = ?;";
 
     private static final String ALL_QUERY
-            = "SELECT id, url, home_id, home_score, away_id, away_score, event_url, bestof, date "
+            = "SELECT id, url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\" "
             + "FROM hltv.match "
-            + "ORDER BY name;";
+            + "ORDER BY \"date\";";
 
     @Override
     public void create(Match match) throws SQLException {
