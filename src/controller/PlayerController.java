@@ -82,7 +82,7 @@ public class PlayerController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         RequestDispatcher dispatcher;
-        DAO<Player> dao;
+        PlayerDAO dao;
 
         switch (request.getServletPath()) {
             case "/player/create":

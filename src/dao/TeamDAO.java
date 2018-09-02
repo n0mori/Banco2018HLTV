@@ -67,7 +67,7 @@ public class TeamDAO extends DAO<Team> {
                 if (result.next()) {
                     return new Team(
                             result.getInt("id"),
-                            result.getString("nome"),
+                            result.getString("name"),
                             result.getString("url"),
                             result.getString("nationality")
                     );
@@ -122,7 +122,7 @@ public class TeamDAO extends DAO<Team> {
             while (resultSet.next()) {
                 Team team = new Team(
                         resultSet.getInt("id"),
-                        resultSet.getString("nome"),
+                        resultSet.getString("name"),
                         resultSet.getString("url"),
                         resultSet.getString("nationality")
                 );

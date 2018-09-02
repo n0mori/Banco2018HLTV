@@ -25,7 +25,7 @@
         <div class="form-group">
             <fieldset class="disabled">
                 <label for="id">Id HLTV</label>
-                <input type="number" class="form-text" id="id" name="id" step="1" contenteditable="false" value="<%= player.getId() %>">
+                <input type="number" class="form-text" id="id" name="id" step="1" contenteditable="false" value="<%= player.getId() %>" readonly>
             </fieldset>
         </div>
         <div class="form-group">

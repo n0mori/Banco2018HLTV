@@ -16,6 +16,7 @@
   <h1>BD2018 - HLTV</h1>
   <a href="/player">Players</a>
   <a href="/team">Teams</a>
+  <a href="/match">Matches</a>
 </div>
 </body>
 </html>

@@ -51,6 +51,8 @@ public class MatchDAO extends DAO<Match> {
             statement.setInt(8, match.getBestOf());
             statement.setDate(9, match.getDate());
 
+            statement.execute();
+
         } catch (SQLException ex) {
             System.err.println("Erro:" + ex.getMessage());
 
@@ -101,6 +103,8 @@ public class MatchDAO extends DAO<Match> {
             statement.setInt(7, match.getBestOf());
             statement.setDate(8, match.getDate());
             statement.setInt(9, match.getId());
+
+            statement.execute();
 
         } catch (SQLException ex) {
             System.err.println("Erro:" + ex.getMessage());
