@@ -39,7 +39,7 @@ public class PerformanceDAO extends DAO<Performance> {
     private static final String ALL_QUERY
             = "SELECT playerid, teamid, matchid, kills, deaths, adr, kast, rating "
             + "FROM hltv.performance "
-            + "ORDER BY matchid DESC, teamid ASC, rating ASC;";
+            + "ORDER BY matchid DESC, teamid ASC, rating DESC;";
 
     public PerformanceDAO(Connection connection) {
         super(connection);
