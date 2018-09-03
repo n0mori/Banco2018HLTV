@@ -9,12 +9,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("Duplicates")
 public class PlayerDAO extends DAO<Player> {
 
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.player"
             + "(id, \"name\", url, nationality)"
-            + "VALUES (?,?,?,?) RETURNING id;";
+            + "VALUES (?,?,?,?) ON CONFLICT ON CONSTRAINT player_pkey DO UPDATE SET "
+            + "\"name\" = ?, url = ?, nationality = ? "
+            + "WHERE hltv.player.id = ?;";
 
     private static final String READ_QUERY
             = "SELECT id, \"name\", url, nationality "
@@ -46,8 +49,12 @@ public class PlayerDAO extends DAO<Player> {
             statement.setString(2, player.getName());
             statement.setString(3, player.getUrl());
             statement.setString(4, player.getNationality());
+            statement.setString(5, player.getName());
+            statement.setString(6, player.getUrl());
+            statement.setString(7, player.getNationality());
+            statement.setInt(8, player.getId());
 
-            statement.executeQuery();
+            statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -88,7 +95,7 @@ public class PlayerDAO extends DAO<Player> {
             statement.setString(3, player.getNationality());
             statement.setInt(4, player.getId());
 
-            statement.executeQuery();
+            statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -102,7 +109,7 @@ public class PlayerDAO extends DAO<Player> {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);) {
             statement.setInt(1, id);
 
-            statement.executeQuery();
+            statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());

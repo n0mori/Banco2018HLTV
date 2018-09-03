@@ -12,12 +12,16 @@ import java.util.List;
 /**
  * Created by nick on 8/28/18.
  */
+@SuppressWarnings("Duplicates")
 public class TeamDAO extends DAO<Team> {
 
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.team "
             + "(id, \"name\", url, nationality)"
-            + "VALUES (?,?,?,?) RETURNING id;";
+            + "VALUES (?,?,?,?) "
+            + "ON CONFLICT ON CONSTRAINT team_pkey DO UPDATE SET "
+            + "\"name\" = ?, url = ?, nationality = ? "
+            + "WHERE hltv.team.id = ?;";
 
     private static final String READ_QUERY
             = "SELECT id, \"name\", url, nationality "
@@ -49,8 +53,12 @@ public class TeamDAO extends DAO<Team> {
             statement.setString(2, team.getName());
             statement.setString(3, team.getUrl());
             statement.setString(4, team.getNationality());
+            statement.setString(5, team.getName());
+            statement.setString(6, team.getUrl());
+            statement.setString(7, team.getNationality());
+            statement.setInt(8, team.getId());
 
-            statement.execute();
+            statement.executeUpdate();
         } catch (SQLException ex) {
             System.err.println("Erro: " + ex.getMessage());
 
@@ -90,7 +98,7 @@ public class TeamDAO extends DAO<Team> {
             statement.setString(3, team.getNationality());
             statement.setInt(4, team.getId());
 
-            statement.execute();
+            statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println("Erro: " + ex.getMessage());
@@ -104,7 +112,7 @@ public class TeamDAO extends DAO<Team> {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_QUERY);) {
             statement.setInt(1, id);
 
-            statement.executeQuery();
+            statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println("Erro: " + ex.getMessage());

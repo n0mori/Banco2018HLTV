@@ -1,7 +1,15 @@
 package json;
 
 import com.google.gson.Gson;
+import dao.*;
+import model.Match;
+import model.Performance;
 import model.Player;
+import model.Team;
+
+import java.io.IOException;
+import java.sql.Date;
+import java.sql.SQLException;
 
 /**
  * Created by nick on 9/3/18.
@@ -26,11 +34,11 @@ public class ImportJSON {
         }
 
         public int getKills() {
-            return kills;
+            return Kills;
         }
 
         public int getDeaths() {
-            return deaths;
+            return Deaths;
         }
 
         public double getADR() {
@@ -49,8 +57,8 @@ public class ImportJSON {
         int ID;
         String Name;
         String Nationality;
-        int kills;
-        int deaths;
+        int Kills;
+        int Deaths;
         double ADR;
         double KAST;
         double Rating;
@@ -154,7 +162,81 @@ public class ImportJSON {
     public void parseAndInsert(String json) {
         M match = gson.fromJson(json, M.class);
 
-        System.err.println(match.getAway().getPlayers()[1].getName());
+        try (DAOFactory daoFactory = new DAOFactory()) {
+            MatchDAO matchDAO = daoFactory.getMatchDAO();
+            TeamDAO teamDAO = daoFactory.getTeamDAO();
+            PlayerDAO playerDAO = daoFactory.getPlayerDAO();
+            PerformanceDAO performanceDAO = daoFactory.getPerformanceDAO();
+
+            Team home = new Team(
+                    match.getHome().getID(),
+                    match.getHome().getName(),
+                    match.getHome().getURL(),
+                    match.getHome().getNationality()
+            );
+
+            Team away = new Team(
+                    match.getAway().getID(),
+                    match.getAway().getName(),
+                    match.getAway().getURL(),
+                    match.getAway().getNationality()
+            );
+
+            teamDAO.create(home);
+            teamDAO.create(away);
+
+            Match m = new Match(
+                    match.getID(),
+                    match.getURL(),
+                    match.getHome().getID(),
+                    match.getHomeScore(),
+                    match.getAway().getID(),
+                    match.getAwayScore(),
+                    match.getEventURL(),
+                    match.getBestOf(),
+                    new Date(match.getDate())
+            );
+
+            matchDAO.create(m);
+
+            P[] homePlayers = match.getHome().getPlayers();
+            P[] awayPlayers = match.getAway().getPlayers();
+
+            exportPerformances(playerDAO, performanceDAO, home, m, homePlayers);
+
+            exportPerformances(playerDAO, performanceDAO, away, m, awayPlayers);
+
+
+        } catch (SQLException | IOException | ClassNotFoundException ex) {
+            System.err.println(ex.getMessage());
+            System.err.println("Aconteceu algum erro fazendo o JSON");
+        }
+
+
+    }
+
+    private void exportPerformances(PlayerDAO playerDAO, PerformanceDAO performanceDAO, Team away, Match m, P[] awayPlayers) throws SQLException {
+        for (P p : awayPlayers) {
+            Player player = new Player(
+                    p.getID(),
+                    p.getName(),
+                    p.getURL(),
+                    p.getNationality()
+            );
+
+            Performance performance = new Performance(p.getID(),
+                    away.getId(),
+                    m.getId(),
+                    p.getKills(),
+                    p.getDeaths(),
+                    p.getADR(),
+                    p.getKAST(),
+                    p.getRating()
+            );
+
+            playerDAO.create(player);
+            performanceDAO.create(performance);
+        }
     }
 
 }

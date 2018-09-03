@@ -17,7 +17,10 @@ public class PerformanceDAO extends DAO<Performance> {
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.performance"
             + "(playerid, teamid, matchid, kills, deaths, adr, kast, rating) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO UPDATE;";
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) "
+            + "ON CONFLICT ON CONSTRAINT pk_performance DO UPDATE SET "
+            + "kills = ?, deaths = ?, adr = ?, kast = ?, rating = ? "
+            + "WHERE hltv.performance.playerid = ? AND hltv.performance.teamid = ? AND hltv.performance.matchid = ?;";
 
     private static final String READ_QUERY
             = "SELECT playerid, teamid, matchid, kills, deaths, adr, kast, rating "
@@ -36,8 +39,7 @@ public class PerformanceDAO extends DAO<Performance> {
     private static final String ALL_QUERY
             = "SELECT playerid, teamid, matchid, kills, deaths, adr, kast, rating "
             + "FROM hltv.performance "
-            + "GROUP BY (matchid, teamid) "
-            + "ORDER BY matchid ASC;";
+            + "ORDER BY matchid DESC, teamid ASC, rating ASC;";
 
     public PerformanceDAO(Connection connection) {
         super(connection);
@@ -54,8 +56,16 @@ public class PerformanceDAO extends DAO<Performance> {
             statement.setDouble(6, performance.getAdr());
             statement.setDouble(7, performance.getKast());
             statement.setDouble(8, performance.getRating());
+            statement.setInt(9, performance.getKills());
+            statement.setInt(10, performance.getDeaths());
+            statement.setDouble(11, performance.getAdr());
+            statement.setDouble(12, performance.getKast());
+            statement.setDouble(13, performance.getRating());
+            statement.setInt(14, performance.getPlayerId());
+            statement.setInt(15, performance.getTeamId());
+            statement.setInt(16, performance.getMatchId());
 
-            statement.execute();
+            statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println("Erro:" + ex.getMessage());
@@ -112,6 +122,8 @@ public class PerformanceDAO extends DAO<Performance> {
             statement.setInt(7, performance.getTeamId());
             statement.setInt(8, performance.getMatchId());
 
+            statement.executeUpdate();
+
         } catch (SQLException ex) {
             System.err.println("Erro: " + ex.getMessage());
 
@@ -131,7 +143,7 @@ public class PerformanceDAO extends DAO<Performance> {
             statement.setInt(2, teamId);
             statement.setInt(3, matchId);
 
-            statement.execute();
+            statement.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println("Erro: " + ex.getMessage());

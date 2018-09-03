@@ -17,7 +17,10 @@ public class MatchDAO extends DAO<Match> {
     private static final String CREATE_QUERY
             = "INSERT INTO hltv.match"
             + "(id, url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\")"
-            + "VALUES (?,?,?,?,?,?,?,?,?) RETURNING id;";
+            + "VALUES (?,?,?,?,?,?,?,?,?) "
+            + "ON CONFLICT ON CONSTRAINT match_pkey DO UPDATE SET "
+            + "url = ?, home_id = ?, home_score = ?, away_id = ?, away_score = ?, event_url = ?, bestof = ?, \"date\" = ? "
+            + "WHERE hltv.match.id = ?;";
 
     private static final String READ_QUERY
             = "SELECT id, url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\" "
@@ -50,6 +53,15 @@ public class MatchDAO extends DAO<Match> {
             statement.setString(7, match.getEventUrl());
             statement.setInt(8, match.getBestOf());
             statement.setDate(9, match.getDate());
+            statement.setString(10, match.getUrl());
+            statement.setInt(11, match.getHomeId());
+            statement.setInt(12, match.getHomeScore());
+            statement.setInt(13, match.getAwayId());
+            statement.setInt(14, match.getAwayScore());
+            statement.setString(15, match.getEventUrl());
+            statement.setInt(16, match.getBestOf());
+            statement.setDate(17, match.getDate());
+            statement.setInt(18, match.getId());
 
             statement.execute();
 

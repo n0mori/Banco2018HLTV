@@ -13,11 +13,12 @@
 </head>
 <body>
 <div class="container">
-  <h1>BD2018 - HLTV</h1>
-  <a href="/player">Players</a>
-  <a href="/team">Teams</a>
-  <a href="/match">Matches</a>
-  <a href="/match/json">JSON</a>
+    <h1>BD2018 - HLTV</h1>
+    <a href="/player">Players</a>
+    <a href="/team">Teams</a>
+    <a href="/match">Matches</a>
+    <a href="/performance">Performances</a>
+    <a href="/match/json">JSON</a>
 </div>
 </body>
 </html>
