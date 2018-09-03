@@ -29,6 +29,9 @@ public class PerformanceServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher;
+        int playerId;
+        int teamId;
+        int matchId;
 
         switch (request.getServletPath()) {
             case "/performance":
@@ -49,6 +52,24 @@ public class PerformanceServlet extends HttpServlet {
 
 
                 break;
+
+            case "/performance/delete":
+
+                playerId = Integer.parseInt(request.getParameter("playerid"));
+                teamId = Integer.parseInt(request.getParameter("teamid"));
+                matchId = Integer.parseInt(request.getParameter("matchid"));
+
+                try (DAOFactory daoFactory = new DAOFactory()) {
+                    PerformanceDAO dao = daoFactory.getPerformanceDAO();
+
+                    dao.delete(playerId, teamId, matchId);
+
+                } catch (ClassNotFoundException | SQLException | IOException ex) {
+                    PrintWriter out = response.getWriter();
+                    out.println(ex.getMessage());
+                }
+
+
         }
 
     }
