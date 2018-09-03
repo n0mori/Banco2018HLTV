@@ -64,6 +64,8 @@ public class PerformanceServlet extends HttpServlet {
 
                     dao.delete(playerId, teamId, matchId);
 
+                    response.sendRedirect(request.getContextPath() + "/performance");
+
                 } catch (ClassNotFoundException | SQLException | IOException ex) {
                     PrintWriter out = response.getWriter();
                     out.println(ex.getMessage());
