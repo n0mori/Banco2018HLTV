@@ -145,13 +145,16 @@ public class ImportJSON {
         }
     }
 
-    Gson gson = new Gson();
+    Gson gson;
 
     public ImportJSON() {
+        gson = new Gson();
     }
 
     public void parseAndInsert(String json) {
-        gson.fromJson(json, M.class);
+        M match = gson.fromJson(json, M.class);
+
+        System.err.println(match.getAway().getPlayers()[1].getName());
     }
 
 }
