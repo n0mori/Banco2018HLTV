@@ -21,10 +21,10 @@
     %>
     <div class="form-group">
         <label for="id">Id HLTV</label>
-        <input type="number" class="form-text" id="id" name="id" step="1">
+        <input type="number" class="form-group" id="id" name="id" step="1">
     </div>
     <div class="form-group">
-        <label for="url">URL HLTV</label><input type="text" class="form-text" id="url" name="url">
+        <label for="url">URL HLTV</label><input type="text" class="form-group" id="url" name="url">
     </div>
     <div class="form-group">
         <label for="homeId">Home Team</label>
