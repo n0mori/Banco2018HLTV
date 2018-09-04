@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.SystemException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -26,7 +27,39 @@ import java.util.List;
 })
 public class PerformanceServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int playerId;
+        int teamId;
+        int matchId;
+        int kills;
+        int deaths;
+        double adr;
+        double kast;
+        double rating;
 
+        switch (request.getServletPath()) {
+            case "/player/create":
+                playerId = Integer.parseInt(request.getParameter("playerid"));
+                teamId = Integer.parseInt(request.getParameter("teamid"));
+                matchId = Integer.parseInt(request.getParameter("matchid"));
+                kills = Integer.parseInt(request.getParameter("kills"));
+                deaths = Integer.parseInt(request.getParameter("deaths"));
+                adr = Double.parseDouble(request.getParameter("adr"));
+                kast = Double.parseDouble(request.getParameter("kast"));
+                rating = Double.parseDouble(request.getParameter("rating"));
+
+                try (DAOFactory daoFactory = new DAOFactory()) {
+                    PerformanceDAO dao = daoFactory.getPerformanceDAO();
+
+                    dao.create(new Performance(playerId, teamId, matchId, kills, deaths, adr, kast, rating));
+
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    System.err.println(ex.getMessage());
+                }
+
+                response.sendRedirect(request.getContextPath() + "/Performance");
+
+                break;
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
