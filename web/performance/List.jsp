@@ -47,7 +47,7 @@
                 out.println("<td>" + p.getPlayerId() + "</td>");
                 out.println("<td>" + p.getKills() + "-" + p.getDeaths() + "</td>");
                 out.println("<td>" + p.getAdr() + "</td>");
-                out.println("<td>" + p.getKast() + "</td>");
+                out.println("<td>" + p.getKast() + "%</td>");
                 out.println("<td>" + p.getRating() + "</td>");
                 out.println("<td><a href=\"/performance/update?playerid=" + p.getPlayerId() + "&teamid=" + p.getTeamId() + "&matchid=" + p.getMatchId() + "\">Edit</a></td>");
                 out.println("<td><a href=\"/performance/delete?playerid=" + p.getPlayerId() + "&teamid=" + p.getTeamId() + "&matchid=" + p.getMatchId() + "\">Remove</a></td>");

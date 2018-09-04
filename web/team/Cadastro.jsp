@@ -17,16 +17,16 @@
 <form action="/team/create" method="post">
     <div class="form-group">
         <label for="id">Id HLTV</label>
-        <input type="number" class="form-text" id="id" name="id" step="1">
+        <input type="number" class="form-control" id="id" name="id" step="1">
     </div>
     <div class="form-group">
-        <label for="name">Nome</label><input type="text" class="form-text" id="name" name="name">
+        <label for="name">Nome</label><input type="text" class="form-control" id="name" name="name">
     </div>
     <div class="form-group">
-        <label for="url">URL HLTV</label><input type="text" class="form-text" id="url" name="url">
+        <label for="url">URL HLTV</label><input type="text" class="form-control" id="url" name="url">
     </div>
     <div class="form-group">
-        <label for="nationality">Nacionalidade</label><input type="text" class="form-text" id="nationality" name="nationality">
+        <label for="nationality">Nacionalidade</label><input type="text" class="form-control" id="nationality" name="nationality">
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary">

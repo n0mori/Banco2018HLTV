@@ -110,7 +110,7 @@ public class ImportJSON {
         int AwayScore;
         String EventURL;
         int BestOf;
-        long date;
+        long Date;
 
         public M() {
 
@@ -149,7 +149,7 @@ public class ImportJSON {
         }
 
         public long getDate() {
-            return date;
+            return Date;
         }
     }
 

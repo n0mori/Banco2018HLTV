@@ -22,17 +22,17 @@
         <div class="form-group">
             <fieldset class="disabled">
                 <label for="id">Id Team HLTV</label>
-                <input type="number" class="form-text" id="id" name="id" step="1" value="<%= team.getId() %>" required readonly>
+                <input type="number" class="form-control" id="id" name="id" step="1" value="<%= team.getId() %>" required readonly>
             </fieldset>
         </div>
         <div class="form-group">
-            <label for="name">Nome</label><input type="text" class="form-text" id="name" name="name" value="<%= team.getName()%>" required>
+            <label for="name">Nome</label><input type="text" class="form-control" id="name" name="name" value="<%= team.getName()%>" required>
         </div>
         <div class="form-group">
-            <label for="url">URL HLTV</label><input type="text" class="form-text" id="url" name="url" value="<%= team.getUrl()%>" required>
+            <label for="url">URL HLTV</label><input type="text" class="form-control" id="url" name="url" value="<%= team.getUrl()%>" required>
         </div>
         <div class="form-group">
-            <label for="nationality">Nacionalidade</label><input type="text" class="form-text" id="nationality" name="nationality" value="<%= team.getNationality()%>" required>
+            <label for="nationality">Nacionalidade</label><input type="text" class="form-control" id="nationality" name="nationality" value="<%= team.getNationality()%>" required>
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-primary">

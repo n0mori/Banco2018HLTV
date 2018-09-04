@@ -26,7 +26,7 @@
             <input type="number" class="form-text" id="id" name="id" step="1" value="<%= match.getId()%>" readonly>
         </div>
         <div class="form-group">
-            <label for="url">URL HLTV</label><input type="text" class="form-text" id="url" name="url" value="<%= match.getUrl()%>">
+            <label for="url">URL HLTV</label><input type="text" class="form-control" id="url" name="url" value="<%= match.getUrl()%>">
         </div>
         <div class="form-group">
             <label for="homeId">Home Team</label>
@@ -44,7 +44,7 @@
         </div>
         <div class="form-group">
             <label for="homeScore">Home Score</label>
-            <input type="number" class="form-text" step="1" name="homeScore" id="homeScore" value="<%=match.getHomeScore()%>">
+            <input type="number" class="form-control" step="1" name="homeScore" id="homeScore" value="<%=match.getHomeScore()%>">
         </div>
         <div class="form-group">
             <label for="awayId">Away Team</label>
@@ -62,18 +62,18 @@
         </div>
         <div class="form-group">
             <label for="awayScore">Away Score</label>
-            <input type="number" class="form-text" step="1" name="awayScore" id="awayScore" value="<%=match.getAwayScore()%>">
+            <input type="number" class="form-control" step="1" name="awayScore" id="awayScore" value="<%=match.getAwayScore()%>">
         </div>
         <div class="form-group">
-            <label for="eventUrl">Event URL HLTV</label><input type="text" class="form-text" id="eventUrl" name="eventUrl" value="<%=match.getEventUrl()%>">
+            <label for="eventUrl">Event URL HLTV</label><input type="text" class="form-control" id="eventUrl" name="eventUrl" value="<%=match.getEventUrl()%>">
         </div>
         <div class="form-group">
             <label for="bestOf">Best Of</label>
-            <input type="number" class="form-text" step="1" name="bestOf" id="bestOf" value="<%=match.getBestOf()%>">
+            <input type="number" class="form-control" step="1" name="bestOf" id="bestOf" value="<%=match.getBestOf()%>">
         </div>
         <div class="form-group">
             <label for="date">Date</label>
-            <input type="date" class="form-text" name="date" id="date" value="<%=match.getDate().toString()%>">
+            <input type="date" class="form-control" name="date" id="date" value="<%=match.getDate().toString()%>">
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-primary">

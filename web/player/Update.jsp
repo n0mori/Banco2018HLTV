@@ -25,17 +25,17 @@
         <div class="form-group">
             <fieldset class="disabled">
                 <label for="id">Id HLTV</label>
-                <input type="number" class="form-text" id="id" name="id" step="1" contenteditable="false" value="<%= player.getId() %>" readonly>
+                <input type="number" class="form-control" id="id" name="id" step="1" contenteditable="false" value="<%= player.getId() %>" readonly>
             </fieldset>
         </div>
         <div class="form-group">
-            <label for="name">Nome</label><input type="text" class="form-text" id="name" name="name" value="<%= player.getName()%>">
+            <label for="name">Nome</label><input type="text" class="form-control" id="name" name="name" value="<%= player.getName()%>">
         </div>
         <div class="form-group">
-            <label for="url">URL HLTV</label><input type="text" class="form-text" id="url" name="url" value="<%= player.getUrl()%>">
+            <label for="url">URL HLTV</label><input type="text" class="form-control" id="url" name="url" value="<%= player.getUrl()%>">
         </div>
         <div class="form-group">
-            <label for="nationality">Nacionalidade</label><input type="text" class="form-text" id="nationality" name="nationality" value="<%= player.getNationality()%>">
+            <label for="nationality">Nacionalidade</label><input type="text" class="form-control" id="nationality" name="nationality" value="<%= player.getNationality()%>">
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-primary">

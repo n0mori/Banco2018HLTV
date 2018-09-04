@@ -38,7 +38,7 @@
     </div>
     <div class="form-group">
         <label for="homeScore">Home Score</label>
-        <input type="number" class="form-text" step="1" name="homeScore" id="homeScore">
+        <input type="number" class="form-control" step="1" name="homeScore" id="homeScore">
     </div>
     <div class="form-group">
         <label for="awayId">Away Team</label>
@@ -52,18 +52,18 @@
     </div>
     <div class="form-group">
         <label for="awayScore">Away Score</label>
-        <input type="number" class="form-text" step="1" name="awayScore" id="awayScore">
+        <input type="number" class="form-control" step="1" name="awayScore" id="awayScore">
     </div>
     <div class="form-group">
-        <label for="eventUrl">Event URL HLTV</label><input type="text" class="form-text" id="eventUrl" name="eventUrl">
+        <label for="eventUrl">Event URL HLTV</label><input type="text" class="form-control" id="eventUrl" name="eventUrl">
     </div>
     <div class="form-group">
         <label for="bestOf">Best Of</label>
-        <input type="number" class="form-text" step="1" name="bestOf" id="bestOf">
+        <input type="number" class="form-control" step="1" name="bestOf" id="bestOf">
     </div>
     <div class="form-group">
         <label for="date">Date</label>
-        <input type="date" class="form-text" name="date" id="date">
+        <input type="date" class="form-control" name="date" id="date">
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary">

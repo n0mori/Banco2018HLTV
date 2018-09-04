@@ -1,6 +1,7 @@
 <%@ page import="model.Player" %>
 <%@ page import="model.Team" %>
-<%@ page import="model.Match" %><%--
+<%@ page import="model.Match" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: n0mori
   Date: 8/23/2018
@@ -16,7 +17,7 @@
 <body>
 <%
     List<Player> playerList = (List<Player>) request.getAttribute("playerList");
-    List<Team> TeamList = (List<Team>) request.getAttribute("teamList");
+    List<Team> teamList = (List<Team>) request.getAttribute("teamList");
     List<Match> matchList = (List<Match>) request.getAttribute("matchList");
 %>
 <div class="container">
@@ -24,7 +25,7 @@
 <form action="/team/create" method="post">
     <div class="form-group">
         <label for="playerid">Player ID</label>
-        <select id="playerid" name="playerid" class="form-group">
+        <select id="playerid" name="playerid" class="form-control">
             <%
                 for (Player p : playerList) {
                     out.println("<option value=\"" + p.getId() + "\">" + p.getName() + "</option>");
@@ -33,8 +34,8 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="teamid">Player ID</label>
-        <select id="teamid" name="teamid" class="form-group">
+        <label for="teamid">Player</label>
+        <select id="teamid" name="teamid" class="form-control">
             <%
                 for (Team t : teamList) {
                     out.println("<option value=\"" + t.getId() + "\">" + t.getName() + "</option>");
@@ -43,29 +44,29 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="matchid">Player ID</label>
-        <select id="matchid" name="matchid" class="form-group">
+        <label for="matchid">Match</label>
+        <select id="matchid" name="matchid" class="form-control">
             <%
                 for (Match m : matchList) {
-                    out.println("<option value=\"" + m.getId() + "\">" m.getHomeId() + " x " m.getAwayId() + "</option>");
+                    out.println("<option value=\"" + m.getId() + "\">" + m.getHomeId() + " x " + m.getAwayId() + "</option>");
                 }
             %>
         </select>
     </div>
     <div class="form-group">
-        <label for="kills">Nome</label><input type="number" class="form-text" id="kills" name="kills" step="1">
+        <label for="kills">Kills</label><input type="number" class="form-control" id="kills" name="kills" step="1">
     </div>
     <div class="form-group">
-        <label for="deaths">Nome</label><input type="number" class="form-text" id="deaths" name="deaths" step="1">
+        <label for="deaths">Deaths</label><input type="number" class="form-control" id="deaths" name="deaths" step="1">
     </div>
     <div class="form-group">
-        <label for="adr">Nome</label><input type="number" class="form-text" id="adr" name="adr">
+        <label for="adr">ADR</label><input type="number" class="form-control" id="adr" name="adr">
     </div>
     <div class="form-group">
-        <label for="kast">Nome</label><input type="number" class="form-text" id="kast" name="kast">
+        <label for="kast">KAST</label><input type="number" class="form-control" id="kast" name="kast">
     </div>
     <div class="form-group">
-        <label for="rating">Nome</label><input type="number" class="form-text" id="rating" name="rating">
+        <label for="rating">Nome</label><input type="number" class="form-control" id="rating" name="rating">
     </div>
     <div class="form-group">
         <input type="submit" class="btn btn-primary">
