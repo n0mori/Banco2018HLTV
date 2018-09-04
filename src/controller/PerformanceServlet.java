@@ -1,8 +1,10 @@
 package controller;
 
-import dao.DAOFactory;
-import dao.PerformanceDAO;
+import dao.*;
+import model.Match;
 import model.Performance;
+import model.Player;
+import model.Team;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -71,6 +73,30 @@ public class PerformanceServlet extends HttpServlet {
                     out.println(ex.getMessage());
                 }
 
+                break;
+
+            case "/performance/create":
+
+                try (DAOFactory daoFactory = new DAOFactory()) {
+                    PlayerDAO playerDAO = daoFactory.getPlayerDAO();
+                    MatchDAO matchDAO = daoFactory.getMatchDAO();
+                    TeamDAO teamDAO = daoFactory.getTeamDAO();
+
+                    List<Player> playerList = playerDAO.all();
+                    List<Match> matchList = matchDAO.all();
+                    List<Team> teamList = teamDAO.all();
+
+                    request.setAttribute("playerList", playerList);
+                    request.setAttribute("matchList", matchList);
+                    request.setAttribute("teamList", teamList);
+
+                    dispatcher = request.getRequestDispatcher("/performance/Cadastro.jsp");
+                    dispatcher.forward(request, response);
+                } catch (ClassNotFound | IOException | SQLException ex) {
+                    PrintWriter out = response.getWriter();
+                    out.println(ex.getMessage());
+                }
+                break;
 
         }
 
