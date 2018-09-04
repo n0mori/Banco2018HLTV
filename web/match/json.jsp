@@ -13,10 +13,10 @@
 </head>
 <body>
 <div class="container">
-    <form action="/match/json" method="post">
+    <form action="/match/json" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="json">JSON</label>
-            <input type="file" id="json" name="json">
+            <input type="file" id="json" name="json" class="form-control-file" accept="application/json">
         </div>
         <div class="form-group">
             <input type="submit" class="btn btn-primary">
