@@ -41,6 +41,12 @@ public class PerformanceDAO extends DAO<Performance> {
             + "FROM hltv.performance "
             + "ORDER BY matchid DESC, teamid ASC, rating DESC;";
 
+    private static final String MATCH_QUERY
+            = "SELECT playerid, teamid, matchid, kills, deaths, adr, kast, rating "
+            + "FROM hltv.Performance "
+            + "WHERE matchid = ? "
+            + "ORDER BY teamid, rating;";
+
     public PerformanceDAO(Connection connection) {
         super(connection);
     }
@@ -179,6 +185,35 @@ public class PerformanceDAO extends DAO<Performance> {
 
             throw new SQLException("Erro ao ler performance");
         }
+        return list;
+    }
+
+    public List<Performance> matchPerformance(int id) throws SQLException {
+        ArrayList<Performance> list = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(MATCH_QUERY)) {
+            statement.setInt(1, id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    list.add(new Performance(
+                            resultSet.getInt("playerid"),
+                            resultSet.getInt("teamid"),
+                            resultSet.getInt("matchid"),
+                            resultSet.getInt("kills"),
+                            resultSet.getInt("deaths"),
+                            resultSet.getDouble("adr"),
+                            resultSet.getDouble("kast"),
+                            resultSet.getDouble("rating")
+                    ));
+                }
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro: " + ex.getMessage());
+
+            throw new SQLException("Erro ao ler performances");
+        }
+
         return list;
     }
 }

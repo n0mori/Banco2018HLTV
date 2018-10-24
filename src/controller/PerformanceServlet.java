@@ -181,7 +181,6 @@ public class PerformanceServlet extends HttpServlet {
                 }
 
                 break;
-
         }
 
     }

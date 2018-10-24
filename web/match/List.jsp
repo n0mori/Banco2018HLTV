@@ -35,6 +35,7 @@
         <td scope="col">Best of</td>
         <td scope="col"></td>
         <td scope="col"></td>
+        <td scope="col"></td>
     </tr>
     </thead>
 
@@ -45,7 +46,7 @@
         if (list != null) {
             for (Match t : list) {
                 out.println("<tr>");
-                out.println("<td>" + t.getId() + "</td>");
+                out.println("<td><a href=\"/match/details?id=" + t.getId() + "\">" + t.getId() + "</a></td>");
                 out.println("<td><a href=\"" + t.getUrl() + "\">" + "Link</a></td>");
                 out.println("<td>" + t.getHomeId() + "</td>");
                 out.println("<td>" + t.getHomeScore() + "</td>");

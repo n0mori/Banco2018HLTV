@@ -2,9 +2,11 @@ package controller;
 
 import dao.DAOFactory;
 import dao.MatchDAO;
+import dao.PerformanceDAO;
 import dao.TeamDAO;
 import json.ImportJSON;
 import model.Match;
+import model.Performance;
 import model.Team;
 
 import javax.servlet.RequestDispatcher;
@@ -26,7 +28,8 @@ import java.util.List;
         "/match/read",
         "/match/update",
         "/match/delete",
-        "/match/json"
+        "/match/json",
+        "/match/details"
 })
 @MultipartConfig
 public class MatchController extends HttpServlet {
@@ -202,6 +205,27 @@ public class MatchController extends HttpServlet {
                 */
                 dispatcher = request.getRequestDispatcher("/match/json.jsp");
                 dispatcher.forward(request, response);
+            case "/match/details":
+                try (DAOFactory daoFactory = new DAOFactory()) {
+                    MatchDAO matchDAO = daoFactory.getMatchDAO();
+                    PerformanceDAO performanceDAO = daoFactory.getPerformanceDAO();
+
+                    int id = Integer.parseInt(request.getParameter("id"));
+
+                    Match match = matchDAO.read(id);
+
+                    List<Performance> performanceList = performanceDAO.matchPerformance(id);
+
+                    request.setAttribute("match", match);
+                    request.setAttribute("performanceList", performanceList);
+
+                    RequestDispatcher view = request.getRequestDispatcher("/match/Details.jsp");
+                    view.forward(request, response);
+
+                } catch (SQLException | IOException | ClassNotFoundException ex) {
+                    PrintWriter out = response.getWriter();
+                    out.println(ex.getMessage());
+                }
         }
     }
 }
