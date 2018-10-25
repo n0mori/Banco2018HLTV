@@ -219,13 +219,15 @@ public class MatchController extends HttpServlet {
                     request.setAttribute("match", match);
                     request.setAttribute("performanceList", performanceList);
 
-                    RequestDispatcher view = request.getRequestDispatcher("/match/Details.jsp");
-                    view.forward(request, response);
+                    dispatcher = request.getRequestDispatcher("/match/Details.jsp");
+                    dispatcher.forward(request, response);
 
                 } catch (SQLException | IOException | ClassNotFoundException ex) {
                     PrintWriter out = response.getWriter();
                     out.println(ex.getMessage());
                 }
+
+                break;
         }
     }
 }

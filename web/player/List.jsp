@@ -35,7 +35,7 @@
         if (list != null) {
             for (Player p : list) {
                 out.println("<tr>");
-                out.println("<td>" + p.getId() + "</td>");
+                out.println("<td><a href=\"/player/details?id=" + p.getId() + "\">" + p.getId() + "</a></td>");
                 out.println("<td>" + p.getName() + "</td>");
                 out.println("<td><a href=\"" + p.getUrl() + "\">" + p.getUrl() + "</a></td>");
                 out.println("<td>" + p.getNationality() + "</td>");

@@ -2,6 +2,7 @@ package controller;
 
 import dao.DAO;
 import dao.DAOFactory;
+import dao.PerformanceDAO;
 import dao.PlayerDAO;
 import model.Player;
 
@@ -22,7 +23,8 @@ import java.util.List;
         "/player/read",
         "/player/update",
         "/player/delete",
-        "/player"
+        "/player",
+        "/player/details"
 })
 public class PlayerController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -137,6 +139,30 @@ public class PlayerController extends HttpServlet {
                     request.getSession().setAttribute("error", ex.getMessage());
                 }
 
+
+                break;
+
+            case "/player/details":
+                try (DAOFactory daoFactory = new DAOFactory()) {
+                    PlayerDAO playerDAO = daoFactory.getPlayerDAO();
+                    PerformanceDAO performanceDAO = daoFactory.getPerformanceDAO();
+
+                    int id = Integer.parseInt(request.getParameter("id"));
+
+                    Player player = playerDAO.read(id);
+                    List<Double> ratings = performanceDAO.playerRatings(id);
+
+                    request.setAttribute("player", player);
+                    request.setAttribute("ratings", ratings);
+
+                    dispatcher = request.getRequestDispatcher("/player/Details.jsp");
+                    dispatcher.forward(request, response);
+
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    PrintWriter out = response.getWriter();
+                    out.println(ex.getMessage());
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
 
                 break;
         }

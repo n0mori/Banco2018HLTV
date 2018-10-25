@@ -216,27 +216,28 @@ public class ImportJSON {
     }
 
     private void exportPerformances(PlayerDAO playerDAO, PerformanceDAO performanceDAO, Team away, Match m, P[] awayPlayers) throws SQLException {
-        for (P p : awayPlayers) {
-            Player player = new Player(
-                    p.getID(),
-                    p.getName(),
-                    p.getURL(),
-                    p.getNationality()
-            );
+        if (awayPlayers != null) {
+            for (P p : awayPlayers) {
+                Player player = new Player(
+                        p.getID(),
+                        p.getName(),
+                        p.getURL(),
+                        p.getNationality()
+                );
 
-            Performance performance = new Performance(p.getID(),
-                    away.getId(),
-                    m.getId(),
-                    p.getKills(),
-                    p.getDeaths(),
-                    p.getADR(),
-                    p.getKAST(),
-                    p.getRating()
-            );
+                Performance performance = new Performance(p.getID(),
+                        away.getId(),
+                        m.getId(),
+                        p.getKills(),
+                        p.getDeaths(),
+                        p.getADR(),
+                        p.getKAST(),
+                        p.getRating()
+                );
 
-            playerDAO.create(player);
-            performanceDAO.create(performance);
+                playerDAO.create(player);
+                performanceDAO.create(performance);
+            }
         }
     }
-
 }

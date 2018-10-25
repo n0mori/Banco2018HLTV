@@ -1,7 +1,9 @@
 package dao;
 
 import model.Performance;
+import model.Player;
 
+import javax.xml.transform.Result;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,9 +45,15 @@ public class PerformanceDAO extends DAO<Performance> {
 
     private static final String MATCH_QUERY
             = "SELECT playerid, teamid, matchid, kills, deaths, adr, kast, rating "
-            + "FROM hltv.Performance "
+            + "FROM hltv.performance "
             + "WHERE matchid = ? "
             + "ORDER BY teamid, rating;";
+
+    private static final String RATING_QUERY
+            = "SELECT rating "
+            + "FROM hltv.performance "
+            + "WHERE playerid = ? "
+            + "ORDER BY matchid DESC";
 
     public PerformanceDAO(Connection connection) {
         super(connection);
@@ -208,6 +216,27 @@ public class PerformanceDAO extends DAO<Performance> {
                     ));
                 }
             }
+        } catch (SQLException ex) {
+            System.err.println("Erro: " + ex.getMessage());
+
+            throw new SQLException("Erro ao ler performances");
+        }
+
+        return list;
+    }
+
+    public List<Double> playerRatings(int playerId) throws SQLException {
+        ArrayList<Double> list = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(RATING_QUERY)) {
+            statement.setInt(1, playerId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    list.add(resultSet.getDouble("rating"));
+                }
+            }
+
         } catch (SQLException ex) {
             System.err.println("Erro: " + ex.getMessage());
 
