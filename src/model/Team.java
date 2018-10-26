@@ -13,6 +13,26 @@ public class Team {
         this.nationality = nationality;
     }
 
+    public Team() {
+
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
     public int getId() {
         return id;
     }
