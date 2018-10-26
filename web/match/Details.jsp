@@ -14,12 +14,12 @@
 %>
 <html>
 <head>
-    <title><%=match.getHomeId()%> vs <%=match.getAwayId()%></title>
+    <title><%=match.getHomeTeam().getName()%> vs <%=match.getAwayTeam().getName()%></title>
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
-    <h1><%=match.getHomeId()%> <%=match.getHomeScore()%> x <%=match.getAwayScore()%> <%=match.getAwayId()%> </h1>
+    <h1><%=match.getHomeTeam().getName()%> <%=match.getHomeScore()%> x <%=match.getAwayScore()%> <%=match.getAwayTeam().getName()%> </h1>
 
     <table class="table">
         <thead class="thead-dark">

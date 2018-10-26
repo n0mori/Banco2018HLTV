@@ -1,6 +1,7 @@
 package dao;
 
 import model.Match;
+import model.Team;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,9 +24,11 @@ public class MatchDAO extends DAO<Match> {
             + "WHERE hltv.match.id = ?;";
 
     private static final String READ_QUERY
-            = "SELECT id, url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\" "
+            = "SELECT hltv.match.id as id, hltv.match.url as url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\", h.name as hname, a.name as aname "
             + "FROM hltv.match "
-            + "WHERE id = ?;";
+            + "INNER JOIN hltv.team as h ON h.id = home_id "
+            + "INNER JOIN hltv.team as a ON a.id = away_id "
+            + "WHERE hltv.match.id = ?;";
 
     private static final String UPDATE_QUERY
             = "UPDATE hltv.match "
@@ -37,9 +40,11 @@ public class MatchDAO extends DAO<Match> {
             + "WHERE id = ?;";
 
     private static final String ALL_QUERY
-            = "SELECT id, url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\" "
+            = "SELECT hltv.match.id as id, hltv.match.url as url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\", h.name as hname, a.name as aname "
             + "FROM hltv.match "
-            + "ORDER BY \"date\";";
+            + "INNER JOIN hltv.team as h ON h.id = home_id "
+            + "INNER JOIN hltv.team as a ON a.id = away_id "
+            + "ORDER BY \"date\" DESC;";
 
     @Override
     public void create(Match match) throws SQLException {
@@ -80,7 +85,7 @@ public class MatchDAO extends DAO<Match> {
 
             try (ResultSet result = statement.executeQuery()) {
                 if (result.next()) {
-                    return new Match(
+                    Match m = new Match(
                             result.getInt("id"),
                             result.getString("url"),
                             result.getInt("home_id"),
@@ -91,6 +96,16 @@ public class MatchDAO extends DAO<Match> {
                             result.getInt("bestof"),
                             result.getDate("date")
                     );
+
+                    Team away = new Team();
+                    away.setName(result.getString("aname"));
+                    m.setAwayTeam(away);
+
+                    Team home = new Team();
+                    home.setName(result.getString("hname"));
+                    m.setHomeTeam(home);
+
+                    return m;
                 }
             }
 
@@ -148,7 +163,7 @@ public class MatchDAO extends DAO<Match> {
                 ResultSet result = statement.executeQuery()) {
 
             while (result.next()) {
-                list.add(new Match(
+                Match m = new Match(
                         result.getInt("id"),
                         result.getString("url"),
                         result.getInt("home_id"),
@@ -158,7 +173,17 @@ public class MatchDAO extends DAO<Match> {
                         result.getString("event_url"),
                         result.getInt("bestof"),
                         result.getDate("date")
-                ));
+                );
+
+                Team away = new Team();
+                away.setName(result.getString("aname"));
+                m.setAwayTeam(away);
+
+                Team home = new Team();
+                home.setName(result.getString("hname"));
+                m.setHomeTeam(home);
+
+                list.add(m);
             }
 
         } catch (SQLException ex) {

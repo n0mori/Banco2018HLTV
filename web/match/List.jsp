@@ -48,11 +48,11 @@
                 out.println("<tr>");
                 out.println("<td><a href=\"/match/details?id=" + t.getId() + "\">" + t.getId() + "</a></td>");
                 out.println("<td><a href=\"" + t.getUrl() + "\">" + "Link</a></td>");
-                out.println("<td>" + t.getHomeId() + "</td>");
+                out.println("<td>" + t.getHomeTeam().getName() + "</td>");
                 out.println("<td>" + t.getHomeScore() + "</td>");
                 out.println("<td>vs</td>");
                 out.println("<td>" + t.getAwayScore() + "</td>");
-                out.println("<td>" + t.getAwayId() + "</td>");
+                out.println("<td>" + t.getAwayTeam().getName() + "</td>");
                 out.println("<td><a href=\"" + t.getEventUrl() + "\">" + "Link</a></td>");
                 out.println("<td>" + t.getDate().toString() + "</td>");
                 out.println("<td>" + t.getBestOf() + "</td>");
