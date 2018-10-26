@@ -1,7 +1,9 @@
 package dao;
 
+import model.Match;
 import model.Performance;
 import model.Player;
+import model.Team;
 
 import javax.xml.transform.Result;
 import java.sql.Connection;
@@ -44,10 +46,13 @@ public class PerformanceDAO extends DAO<Performance> {
             + "ORDER BY matchid DESC, teamid ASC, rating DESC;";
 
     private static final String MATCH_QUERY
-            = "SELECT playerid, teamid, matchid, kills, deaths, adr, kast, rating "
+            = "SELECT playerid, teamid, matchid, kills, deaths, adr, kast, rating, hltv.player.name as pname, hltv.team.name as tname, hltv.match.date as mdate "
             + "FROM hltv.performance "
+            + "INNER JOIN hltv.player ON playerid = hltv.player.id "
+            + "INNER JOIN hltv.team ON teamid = hltv.team.id "
+            + "INNER JOIN hltv.match ON matchid = hltv.match.id "
             + "WHERE matchid = ? "
-            + "ORDER BY teamid, rating;";
+            + "ORDER BY teamid, rating DESC;";
 
     private static final String RATING_QUERY
             = "SELECT rating "
@@ -204,7 +209,7 @@ public class PerformanceDAO extends DAO<Performance> {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    list.add(new Performance(
+                    Performance p = new Performance(
                             resultSet.getInt("playerid"),
                             resultSet.getInt("teamid"),
                             resultSet.getInt("matchid"),
@@ -213,7 +218,24 @@ public class PerformanceDAO extends DAO<Performance> {
                             resultSet.getDouble("adr"),
                             resultSet.getDouble("kast"),
                             resultSet.getDouble("rating")
-                    ));
+                    );
+
+                    Match m = new Match();
+                    m.setId(resultSet.getInt("matchid"));
+                    m.setDate(resultSet.getDate("mdate"));
+                    p.setMatch(m);
+
+                    Team t = new Team();
+                    t.setId(resultSet.getInt("teamid"));
+                    t.setName(resultSet.getString("tname"));
+                    p.setTeam(t);
+
+                    Player player = new Player();
+                    player.setId(resultSet.getInt("playerid"));
+                    player.setName(resultSet.getString("pname"));
+                    p.setPlayer(player);
+
+                    list.add(p);
                 }
             }
         } catch (SQLException ex) {
@@ -245,4 +267,6 @@ public class PerformanceDAO extends DAO<Performance> {
 
         return list;
     }
+
+
 }

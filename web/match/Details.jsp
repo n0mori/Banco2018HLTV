@@ -38,8 +38,8 @@
         %>
 
         <tr>
-            <td><%=p.getTeamId()%></td>
-            <td><%=p.getPlayerId()%></td>
+            <td><%=p.getTeam().getName()%></td>
+            <td><a href="/player/details?id=<%=p.getPlayerId()%>"><%=p.getPlayer().getName()%></a></td>
             <td><%=p.getKills()%>-<%=p.getDeaths()%></td>
             <td><%=p.getAdr()%></td>
             <td><%=p.getKast()%></td>
