@@ -60,6 +60,13 @@ public class PerformanceDAO extends DAO<Performance> {
             + "WHERE playerid = ? "
             + "ORDER BY matchid DESC";
 
+    private static final String RANKING_QUERY
+            = "SELECT rating, playerid, hltv.player.name as name, hltv.player.nationality as nationality "
+            + "FROM ( SELECT playerid, avg(rating) as rating, COUNT(*) as cnt from hltv.performance group by playerid) as foo"
+            + "INNER JOIN hltv.player on hltv.player.id = playerid "
+            + "WHERE cnt >= 10"
+            + "ORDER BY rating DESC;";
+
     public PerformanceDAO(Connection connection) {
         super(connection);
     }
@@ -268,5 +275,36 @@ public class PerformanceDAO extends DAO<Performance> {
         return list;
     }
 
+    public List<Performance> playerRankings() throws SQLException {
+        ArrayList<Performance> ranking = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(RANKING_QUERY)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Performance p = new Performance();
+
+                    Player player = new Player();
+                    player.setName(resultSet.getString("name"));
+                    player.setId(resultSet.getInt("playerid"));
+                    player.setNationality(resultSet.getString("nationality"));
+
+                    p.setPlayer(player);
+                    p.setRating(resultSet.getDouble("rating"));
+
+                    ranking.add(p);
+                }
+
+
+            } catch (SQLException ex) {
+                System.err.println("Erro: " + ex.getMessage());
+
+                throw new SQLException("Erro no ranking");
+            }
+        }
+
+        return ranking;
+
+    }
 
 }

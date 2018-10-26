@@ -4,6 +4,7 @@ import dao.DAO;
 import dao.DAOFactory;
 import dao.PerformanceDAO;
 import dao.PlayerDAO;
+import model.Performance;
 import model.Player;
 
 import javax.servlet.RequestDispatcher;
@@ -24,7 +25,8 @@ import java.util.List;
         "/player/update",
         "/player/delete",
         "/player",
-        "/player/details"
+        "/player/details",
+        "/player/rankings"
 })
 public class PlayerController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -156,6 +158,25 @@ public class PlayerController extends HttpServlet {
                     request.setAttribute("ratings", ratings);
 
                     dispatcher = request.getRequestDispatcher("/player/Details.jsp");
+                    dispatcher.forward(request, response);
+
+                } catch (ClassNotFoundException | IOException | SQLException ex) {
+                    PrintWriter out = response.getWriter();
+                    out.println(ex.getMessage());
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
+
+                break;
+
+            case "/player/rankings":
+                try (DAOFactory daoFactory = new DAOFactory()) {
+                    PerformanceDAO performanceDAO = daoFactory.getPerformanceDAO();
+
+                    List<Performance> ranking = performanceDAO.playerRankings();
+
+                    request.setAttribute("ranking", ranking);
+
+                    dispatcher = request.getRequestDispatcher("/player/Ranking.jsp");
                     dispatcher.forward(request, response);
 
                 } catch (ClassNotFoundException | IOException | SQLException ex) {

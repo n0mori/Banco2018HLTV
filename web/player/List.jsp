@@ -17,6 +17,7 @@
     <h1>Lista de Players</h1>
 
     <a href="/player/create">Create</a>
+    <a href="/player/rankings">Ranking</a>
     <%
         List<Player> list = (List<Player>) request.getAttribute("playerList");
 
