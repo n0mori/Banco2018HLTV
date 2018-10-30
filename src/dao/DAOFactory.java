@@ -77,6 +77,8 @@ public class DAOFactory implements AutoCloseable {
 
     public PerformanceDAO getPerformanceDAO() { return new PerformanceDAO(connection);}
 
+    public StatsDAO getStatsDAO() { return new StatsDAO(connection);}
+
     @Override
     public void close() throws SQLException {
         closeConnection();
