@@ -14,12 +14,14 @@
 <body>
 <div class="container">
     <h1>BD2018 - HLTV</h1>
-    <a href="/player">Players</a>
-    <a href="/team">Teams</a>
-    <a href="/match">Matches</a>
-    <a href="/stats">Stats</a>
-    <!--<a href="/performance">Performances</a>-->
-    <a href="/match/json">JSON</a>
+    <div class="navbar">
+        <a href="/player" class="nav-item nav-link">Players</a>
+        <a href="/team" class="nav-item nav-link">Teams</a>
+        <a href="/match" class="nav-item nav-link">Matches</a>
+        <a href="/stats" class="nav-item nav-link">Stats</a>
+        <!--<a href="/performance">Performances</a>-->
+        <a href="/match/json" class="nav-item nav-link">JSON</a>
+    </div>
 </div>
 </body>
 </html>

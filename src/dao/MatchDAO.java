@@ -46,6 +46,14 @@ public class MatchDAO extends DAO<Match> {
             + "INNER JOIN hltv.team as a ON a.id = away_id "
             + "ORDER BY \"date\" DESC;";
 
+    private static final String HISTORY_QUERY
+            = "SELECT hltv.match.id as id, hltv.match.url as url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\", h.name as hname, a.name as aname "
+            + "FROM hltv.match "
+            + "INNER JOIN hltv.team as h ON h.id = home_id "
+            + "INNER JOIN hltv.team as a ON a.id = away_id "
+            + "WHERE (home_id = ? and away_id = ?) OR (away_id = ? and home_id = ?) "
+            + "ORDER BY \"date\" DESC;";
+
     @Override
     public void create(Match match) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_QUERY);) {
@@ -159,37 +167,38 @@ public class MatchDAO extends DAO<Match> {
     public List<Match> all() throws SQLException {
         List<Match> list = new ArrayList<Match>();
 
-        try (PreparedStatement statement = connection.prepareStatement(ALL_QUERY);
-                ResultSet result = statement.executeQuery()) {
+        try (PreparedStatement statement = connection.prepareStatement(ALL_QUERY)) {
+            try (ResultSet result = statement.executeQuery()) {
 
-            while (result.next()) {
-                Match m = new Match(
-                        result.getInt("id"),
-                        result.getString("url"),
-                        result.getInt("home_id"),
-                        result.getInt("home_score"),
-                        result.getInt("away_id"),
-                        result.getInt("away_score"),
-                        result.getString("event_url"),
-                        result.getInt("bestof"),
-                        result.getDate("date")
-                );
+                while (result.next()) {
+                    Match m = new Match(
+                            result.getInt("id"),
+                            result.getString("url"),
+                            result.getInt("home_id"),
+                            result.getInt("home_score"),
+                            result.getInt("away_id"),
+                            result.getInt("away_score"),
+                            result.getString("event_url"),
+                            result.getInt("bestof"),
+                            result.getDate("date")
+                    );
 
-                Team away = new Team();
-                away.setName(result.getString("aname"));
-                m.setAwayTeam(away);
+                    Team away = new Team();
+                    away.setName(result.getString("aname"));
+                    m.setAwayTeam(away);
 
-                Team home = new Team();
-                home.setName(result.getString("hname"));
-                m.setHomeTeam(home);
+                    Team home = new Team();
+                    home.setName(result.getString("hname"));
+                    m.setHomeTeam(home);
 
-                list.add(m);
+                    list.add(m);
+                }
+
+            } catch (SQLException ex) {
+                System.err.println("Erro: " + ex.getMessage());
+
+                throw new SQLException("Erro ao selecionar partidas");
             }
-
-        } catch (SQLException ex) {
-            System.err.println("Erro: " + ex.getMessage());
-
-            throw new SQLException("Erro ao selecionar partidas");
         }
 
         return list;
@@ -197,5 +206,56 @@ public class MatchDAO extends DAO<Match> {
 
     public MatchDAO(Connection connection) {
         super(connection);
+    }
+
+    @SuppressWarnings("Duplicates")
+    public List<Match> matchHistory(int homeId, int awayId) throws SQLException {
+        ArrayList<Match> list = new ArrayList<Match>();
+
+        try (PreparedStatement statement = connection.prepareStatement(HISTORY_QUERY)) {
+            statement.setInt(1, homeId);
+            statement.setInt(2, awayId);
+            statement.setInt(3, homeId);
+            statement.setInt(4, awayId);
+
+            try (ResultSet result = statement.executeQuery()) {
+
+                while (result.next()) {
+                    Match m = new Match(
+                            result.getInt("id"),
+                            result.getString("url"),
+                            result.getInt("home_id"),
+                            result.getInt("home_score"),
+                            result.getInt("away_id"),
+                            result.getInt("away_score"),
+                            result.getString("event_url"),
+                            result.getInt("bestof"),
+                            result.getDate("date")
+                    );
+
+                    Team away = new Team();
+                    away.setName(result.getString("aname"));
+                    m.setAwayTeam(away);
+
+                    Team home = new Team();
+                    home.setName(result.getString("hname"));
+                    m.setHomeTeam(home);
+
+                    list.add(m);
+                }
+
+            } catch (SQLException ex) {
+                System.err.println("Erro: " + ex.getMessage());
+
+                throw new SQLException("Erro ao selecionar confrontos");
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("Erro: " + ex.getMessage());
+
+            throw new SQLException("Erro ao selecionar partida");
+        }
+
+        return list;
     }
 }

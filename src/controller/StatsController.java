@@ -16,7 +16,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet(name = "StatsController",
-    urlPatterns = "/stats")
+    urlPatterns = {
+        "/stats"
+    })
 public class StatsController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

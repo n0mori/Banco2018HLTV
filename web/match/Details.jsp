@@ -11,6 +11,7 @@
 <%
     List<Performance> performances = (List<Performance>) request.getAttribute("performanceList");
     Match match = (Match) request.getAttribute("match");
+    List<Match> matches = (List<Match>) request.getAttribute("matches");
 %>
 <html>
 <head>
@@ -21,7 +22,7 @@
 <div class="container">
     <h1><%=match.getHomeTeam().getName()%> <%=match.getHomeScore()%> x <%=match.getAwayScore()%> <%=match.getAwayTeam().getName()%> </h1>
 
-    <table class="table">
+    <table class="table table-striped">
         <thead class="thead-dark">
         <td scope="col">Team</td>
         <td scope="col">Player</td>
@@ -34,7 +35,10 @@
         </thead>
 
         <%
+            int i = 0;
             for (Performance p : performances) {
+                //if (i == 5) out.println("<tr><br></tr>");
+                //i++;
         %>
 
         <tr>
@@ -50,6 +54,27 @@
             };
         %>
     </table>
+
+    <h2>Confrontos</h2>
+
+    <table class="table table-striped">
+        <%
+            for (Match m : matches) {
+        %>
+
+        <tr>
+            <td><%=m.getHomeTeam().getName()%></td>
+            <td><%=m.getHomeScore()%></td>
+            <td>vs</td>
+            <td><%=m.getAwayScore()%></td>
+            <td><%=m.getAwayTeam().getName()%></td>
+        </tr>
+
+        <%
+            }
+        %>
+    </table>
+
 </div>
 </body>
 </html>

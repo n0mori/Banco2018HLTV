@@ -216,6 +216,9 @@ public class MatchController extends HttpServlet {
 
                     List<Performance> performanceList = performanceDAO.matchPerformance(id);
 
+                    List<Match> matches = matchDAO.matchHistory(match.getHomeId(), match.getAwayId());
+
+                    request.setAttribute("matches", matches);
                     request.setAttribute("match", match);
                     request.setAttribute("performanceList", performanceList);
 
