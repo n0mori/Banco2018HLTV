@@ -63,11 +63,13 @@
         %>
 
         <tr>
+            <td><a href="/match/details?id=<%=m.getId()%>">Detalhes</a></td>
             <td><%=m.getHomeTeam().getName()%></td>
             <td><%=m.getHomeScore()%></td>
             <td>vs</td>
             <td><%=m.getAwayScore()%></td>
             <td><%=m.getAwayTeam().getName()%></td>
+            <td><%if (m.getId() == match.getId()) out.println("*");%></td>
         </tr>
 
         <%
