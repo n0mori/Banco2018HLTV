@@ -1,6 +1,7 @@
 <%@ page import="model.Performance" %>
 <%@ page import="java.util.List" %>
-<%@ page import="model.Match" %><%--
+<%@ page import="model.Match" %>
+<%--
   Created by IntelliJ IDEA.
   User: n0mori
   Date: 10/23/2018
@@ -76,6 +77,7 @@
             }
         %>
     </table>
+
 
 </div>
 </body>

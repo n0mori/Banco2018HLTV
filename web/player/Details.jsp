@@ -10,6 +10,7 @@
 <%
     Player player = (Player) request.getAttribute("player");
     List<Double> ratings = (List<Double>) request.getAttribute("ratings");
+    double avg = (double) request.getAttribute("avg");
 %>
 <html>
 <head>
@@ -31,7 +32,13 @@
         data = [{
             type:'scatter',
             x: [0, <% for (int i = 1; i <= ratings.size(); i++) out.print("," + i);%>],
-            y: <%=ratings%>
+            y: <%=ratings%>,
+            name: "<%=player.getName()%>"
+        }, {
+            type:'scatter',
+            x: [0, <% for (int i = 1; i <= ratings.size(); i++) out.print("," + i);%>],
+            y: [0, <% for (int i = 1; i <= ratings.size(); i++) out.print("," + avg);%>],
+            name: "average rating"
         }]
 
         Plotly.plot("graph",data)

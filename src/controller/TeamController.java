@@ -1,7 +1,7 @@
 package controller;
 
-import dao.DAOFactory;
-import dao.TeamDAO;
+import dao.*;
+import model.Match;
 import model.Player;
 import model.Team;
 
@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "TeamController", urlPatterns = {
@@ -22,6 +23,7 @@ import java.util.List;
         "/team/read",
         "/team/update",
         "/team/delete",
+        "/team/details"
 })
 public class TeamController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -132,6 +134,41 @@ public class TeamController extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/team");
                 break;
 
+            case "/team/details":
+                try (DAOFactory daoFactory = new DAOFactory();) {
+                    TeamDAO teamDAO = daoFactory.getTeamDAO();
+                    MatchDAO matchDAO = daoFactory.getMatchDAO();
+                    PerformanceDAO performanceDAO = daoFactory.getPerformanceDAO();
+                    PlayerDAO playerDAO = daoFactory.getPlayerDAO();
+
+                    int teamid = Integer.parseInt(request.getParameter("id"));
+
+                    Team team = teamDAO.read(teamid);
+                    Match match = matchDAO.lastMatch(teamid);
+                    double winRate = matchDAO.winRate(teamid);
+
+                    List<Integer> playerids = performanceDAO.lastLineup(teamid);
+                    List<Player> players = new ArrayList<>();
+
+                    for (int id : playerids) {
+                        players.add(playerDAO.read(id));
+                    }
+
+                    request.setAttribute("team", team);
+                    request.setAttribute("match", match);
+                    request.setAttribute("winRate", winRate);
+                    request.setAttribute("players", players);
+
+                    dispatcher = request.getRequestDispatcher("/team/Details.jsp");
+                    dispatcher.forward(request, response);
+
+                } catch (SQLException | ClassNotFoundException | IOException ex) {
+                    PrintWriter out = response.getWriter();
+                    out.println(ex.getMessage());
+                    request.getSession().setAttribute("error", ex.getMessage());
+                }
+
+                break;
         }
 
     }

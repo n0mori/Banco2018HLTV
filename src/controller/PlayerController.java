@@ -153,9 +153,11 @@ public class PlayerController extends HttpServlet {
 
                     Player player = playerDAO.read(id);
                     List<Double> ratings = performanceDAO.playerRatings(id);
+                    double avg = performanceDAO.averageRating();
 
                     request.setAttribute("player", player);
                     request.setAttribute("ratings", ratings);
+                    request.setAttribute("avg", avg);
 
                     dispatcher = request.getRequestDispatcher("/player/Details.jsp");
                     dispatcher.forward(request, response);

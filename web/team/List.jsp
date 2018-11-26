@@ -38,7 +38,7 @@
         if (list != null) {
             for (Team t : list) {
                 out.println("<tr>");
-                out.println("<td>" + t.getId() + "</td>");
+                out.println("<td><a href=\"/team/details?id=" + t.getId() + "\">" + t.getId() + "</a></td>");
                 out.println("<td>" + t.getName() + "</td>");
                 out.println("<td><a href=\"" + t.getUrl() + "\">" + t.getUrl() + "</a></td>");
                 out.println("<td>" + t.getNationality() + "</td>");

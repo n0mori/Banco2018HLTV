@@ -54,6 +54,25 @@ public class MatchDAO extends DAO<Match> {
             + "WHERE (home_id = ? and away_id = ?) OR (away_id = ? and home_id = ?) "
             + "ORDER BY \"date\" DESC;";
 
+    private static final String LAST_MATCH
+            = "SELECT hltv.match.id as id, hltv.match.url as url, home_id, home_score, away_id, away_score, event_url, bestof, \"date\", h.name as hname, a.name as aname "
+            + "FROM hltv.match "
+            + "INNER JOIN hltv.team as h ON h.id = home_id "
+            + "INNER JOIN hltv.team as a ON a.id = away_id "
+            + "WHERE (home_id = ?) OR (away_id = ?) "
+            + "ORDER BY \"date\" DESC "
+            + "LIMIT 1;";
+
+    private static final String WIN_COUNT
+            = "SELECT COUNT(*) as cnt "
+            + "FROM hltv.match "
+            + "WHERE (home_id = ? and home_score > away_score) OR (away_id = ? and away_score > home_score) ";
+
+    private static final String TEAM_MATCH_COUNT
+            = "SELECT COUNT(*) as cnt "
+            + "FROM hltv.match "
+            + "WHERE home_id = ? or away_id = ?;";
+
     @Override
     public void create(Match match) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(CREATE_QUERY);) {
@@ -258,4 +277,88 @@ public class MatchDAO extends DAO<Match> {
 
         return list;
     }
+
+    public Match lastMatch(int teamid) throws SQLException {
+        Match m;
+        try (PreparedStatement statement = connection.prepareStatement(LAST_MATCH)) {
+            statement.setInt(1, teamid);
+            statement.setInt(2, teamid);
+
+            try (ResultSet result = statement.executeQuery()) {
+
+                result.next();
+                m = new Match(
+                        result.getInt("id"),
+                        result.getString("url"),
+                        result.getInt("home_id"),
+                        result.getInt("home_score"),
+                        result.getInt("away_id"),
+                        result.getInt("away_score"),
+                        result.getString("event_url"),
+                        result.getInt("bestof"),
+                        result.getDate("date")
+                );
+
+                Team away = new Team();
+                away.setName(result.getString("aname"));
+                m.setAwayTeam(away);
+
+                Team home = new Team();
+                home.setName(result.getString("hname"));
+                m.setHomeTeam(home);
+
+                return m;
+
+            } catch (SQLException ex) {
+                System.err.println("Erro: " + ex.getMessage());
+
+                throw new SQLException("Erro ao selecionar confrontos");
+            }
+
+        } catch (SQLException ex) {
+            System.err.println("Erro: " + ex.getMessage());
+
+            throw new SQLException("Erro ao selecionar partida");
+        }
+    }
+
+    public int winCount(int teamid) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(WIN_COUNT)) {
+            statement.setInt(1, teamid);
+            statement.setInt(2, teamid);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt("cnt");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro: " + ex.getMessage());
+
+            throw new SQLException("Erro ao contar partidas");
+        }
+    }
+
+    public int teamMatchCount(int teamid) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(TEAM_MATCH_COUNT)) {
+            statement.setInt(1, teamid);
+            statement.setInt(2, teamid);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getInt("cnt");
+            }
+        } catch (SQLException ex) {
+            System.err.println("Erro: " + ex.getMessage());
+
+            throw new SQLException("Erro ao contar partidas");
+        }
+    }
+
+    public double winRate(int teamid) throws SQLException {
+        int matches = this.teamMatchCount(teamid);
+        int wins = this.winCount(teamid);
+
+        return 100.0 * (double) wins / (double) matches;
+    }
+
 }

@@ -67,6 +67,22 @@ public class PerformanceDAO extends DAO<Performance> {
             + "WHERE cnt >= 10"
             + "ORDER BY rating DESC;";
 
+    private static final String AVG_RATING_QUERY
+            = "SELECT avg(foo.rating) as rating "
+            + "FROM (SELECT rating, playerid, hltv.player.name as name, hltv.player.nationality as nationality "
+            + "FROM ( SELECT playerid, avg(rating) as rating, COUNT(*) as cnt from hltv.performance group by playerid) as foo"
+            + "INNER JOIN hltv.player on hltv.player.id = playerid "
+            + "WHERE cnt >= 10"
+            + "ORDER BY rating DESC) as foo;";
+
+    private static final String RECENT_LINEUP
+            = "SELECT playerid "
+            + "FROM hltv.performance "
+            + "INNER JOIN hltv.match on hltv.match.id = matchid "
+            + "WHERE teamid = ? "
+            + "ORDER BY hltv.match.date DESC "
+            + "LIMIT 5;";
+
     public PerformanceDAO(Connection connection) {
         super(connection);
     }
@@ -305,6 +321,36 @@ public class PerformanceDAO extends DAO<Performance> {
 
         return ranking;
 
+    }
+
+    public double averageRating() throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(AVG_RATING_QUERY)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                resultSet.next();
+                return resultSet.getDouble("rating");
+            } catch (SQLException ex) {
+                System.err.println("Erro: " + ex.getMessage());
+
+                throw new SQLException("Erro na media de rating");
+            }
+        }
+    }
+
+    public List<Integer> lastLineup(int teamid) throws SQLException {
+        List<Integer> list = new ArrayList<Integer>();
+
+        try (PreparedStatement statement = connection.prepareStatement(RECENT_LINEUP)) {
+
+            statement.setInt(1, teamid);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    list.add(resultSet.getInt(1));
+                }
+            }
+        }
+
+        return list;
     }
 
 }
